@@ -182,7 +182,7 @@ const ExpenseTracker = () => {
       </div>
 
              {/* 統計卡片 */}
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
          <Card>
            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
              <CardTitle className="text-sm font-medium">總支出</CardTitle>
@@ -226,8 +226,8 @@ const ExpenseTracker = () => {
           </CardTitle>
           <CardDescription>記錄您的最新支出項目</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <CardContent className="space-y-4">
+           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                 項目名稱
@@ -259,11 +259,11 @@ const ExpenseTracker = () => {
             </div>
           </div>
 
-          <Button 
-            onClick={addExpense} 
-            className="w-full md:w-auto" 
-            size="lg"
-          >
+                     <Button 
+             onClick={addExpense} 
+             className="w-full sm:w-auto" 
+             size="lg"
+           >
             <Plus className="w-4 h-4 mr-2" />
             新增支出
           </Button>
@@ -273,8 +273,8 @@ const ExpenseTracker = () => {
              {/* 支出清單 */}
        <Card>
          <CardHeader>
-           <div className="flex items-center justify-between">
-             <div>
+           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
+             <div className="flex-1">
                <CardTitle>支出記錄</CardTitle>
                <CardDescription>
                  {expenses.length > 0 
@@ -283,34 +283,32 @@ const ExpenseTracker = () => {
                  }
                </CardDescription>
              </div>
-             <div className="flex gap-2">
-               {expenses.length > 0 && (
-                 <>
-                   <Button
-                     variant="outline"
-                     size="sm"
-                     onClick={exportToPDF}
-                     className="text-primary hover:text-primary"
-                   >
-                     <Download className="w-4 h-4 mr-2" />
-                     匯出PDF
-                   </Button>
-                   <Button
-                     variant="outline"
-                     size="sm"
-                     onClick={() => {
-                       if (window.confirm('確定要清除所有記帳資料嗎？此操作無法復原！')) {
-                         setExpenses([]);
-                       }
-                     }}
-                     className="text-destructive hover:text-destructive"
-                   >
-                     <Trash2 className="w-4 h-4 mr-2" />
-                     清空全部
-                   </Button>
-                 </>
-               )}
-             </div>
+             {expenses.length > 0 && (
+               <div className="flex flex-col gap-2 sm:flex-row sm:gap-2">
+                 <Button
+                   variant="outline"
+                   size="sm"
+                   onClick={exportToPDF}
+                   className="text-primary hover:text-primary w-full sm:w-auto"
+                 >
+                   <Download className="w-4 h-4 mr-2" />
+                   匯出PDF
+                 </Button>
+                 <Button
+                   variant="outline"
+                   size="sm"
+                   onClick={() => {
+                     if (window.confirm('確定要清除所有記帳資料嗎？此操作無法復原！')) {
+                       setExpenses([]);
+                     }
+                   }}
+                   className="text-destructive hover:text-destructive w-full sm:w-auto"
+                 >
+                   <Trash2 className="w-4 h-4 mr-2" />
+                   清空全部
+                 </Button>
+               </div>
+             )}
            </div>
          </CardHeader>
         <CardContent>
@@ -327,38 +325,39 @@ const ExpenseTracker = () => {
               </div>
             </div>
           ) : (
-            <div className="space-y-3">
-              {expenses.map((expense) => (
-                <div
-                  key={expense.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                >
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-3">
-                      <h3 className="font-medium">{expense.name}</h3>
-                      <Badge variant="outline" className="text-xs">
-                        {expense.date}
-                      </Badge>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <DollarSign className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-lg font-semibold text-destructive">
-                        NT$ {expense.amount.toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
+                         <div className="space-y-3">
+               {expenses.map((expense) => (
+                 <div
+                   key={expense.id}
+                   className="flex flex-col space-y-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors sm:flex-row sm:items-center sm:justify-between sm:space-y-0"
+                 >
+                   <div className="flex-1 space-y-2">
+                     <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:gap-3 sm:space-y-0">
+                       <h3 className="font-medium text-base">{expense.name}</h3>
+                       <Badge variant="outline" className="text-xs w-fit">
+                         {expense.date}
+                       </Badge>
+                     </div>
+                     <div className="flex items-center gap-2">
+                       <DollarSign className="w-4 h-4 text-muted-foreground" />
+                       <span className="text-lg font-semibold text-destructive">
+                         NT$ {expense.amount.toLocaleString()}
+                       </span>
+                     </div>
+                   </div>
 
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => deleteExpense(expense.id)}
-                    className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
+                   <Button
+                     variant="ghost"
+                     size="sm"
+                     onClick={() => deleteExpense(expense.id)}
+                     className="text-destructive hover:text-destructive hover:bg-destructive/10 w-full sm:w-auto"
+                   >
+                     <Trash2 className="w-4 h-4 mr-2 sm:mr-0" />
+                     <span className="sm:hidden">刪除</span>
+                   </Button>
+                 </div>
+               ))}
+             </div>
           )}
         </CardContent>
       </Card>
